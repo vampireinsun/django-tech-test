@@ -10,8 +10,8 @@ Build a Django app for borrowers to register and request a loan. You will need t
 #### Notes for implementation
 * No third part auth package involved with, django own auth framwork is used
 * The database db.sqlite3 contains some sample data 
-** users:  neily:neily,  ymao:ymao, admin:admin
-** Only the user admin has the right to access the admin site
-** The main entry page is : http://127.0.0.1:8000/index/
-** I use django's own server to run this implementation.
+   - users:  neily:neily,  ymao:ymao, admin:admin
+   - Only the user admin has the right to access the admin site
+   - The main entry page is : http://127.0.0.1:8000/index/
+   - I use django's own server to run this implementation.
 
