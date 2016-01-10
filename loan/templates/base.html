@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+{% block inhead %}
+{% endblock inhead %}
+
+</head>
+
+{% block body %}
+
+<body>
+	<div id="topBar">
+    	<h1 id="gtVersion">&nbsp;Growth Street Loan Management</h1>
+	</div>
+    <div class="contentSection" id="rightSection">
+        {% block content %}{% endblock %}
+        <div id='footer'>&copy; 2016 Growth Street Limited</div>
+    </div>
+</body>
+
+{% endblock body %}
+</html>

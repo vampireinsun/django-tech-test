@@ -37,6 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'borrower',
+    'loan',
+    'growthstreet',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,11 +65,19 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'growthstreet.wsgi.application'
 
@@ -100,3 +111,51 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+PRODUCT_INSTSALLATION_ROOT = "."
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s %(module)s %(funcName)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'default': {
+            'level':'WARN',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(PRODUCT_INSTSALLATION_ROOT, 'logs/my_system.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },
+        'request_handler': {
+            'level':'WARN',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(PRODUCT_INSTSALLATION_ROOT, 'logs/django_request.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers':['default'],
+            'propagate': True,
+            'level':'WARN',
+        },
+        'django.request': {
+            'handlers': ['request_handler'],
+            'level': 'WARN',
+            'propagate': True,
+        }
+    }
+}

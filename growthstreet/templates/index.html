@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Growth Street Loan Management</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+	<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script>
+    	function deleteBusinessAction(btn, row_id) {
+		    if (confirm("Are you sure you want to delete this record?") == true) {
+				var process_link = "/borrower/" + row_id + "/business/";
+				$.ajax({
+					url: process_link,
+					type: 'DELETE',
+					headers: { "X-CSRFToken":  getCookie('csrftoken')},
+					success: function(result) {
+						var row = btn.parentNode.parentNode;
+  						row.parentNode.removeChild(row);
+						$("#id_message_box").html("Delete successfully!").delay(10000).fadeOut();
+					},
+					error: function(xhr, error){
+						$("#id_message_box").show();
+						$("#id_message_box").html(error).delay(10000).fadeOut();
+					}
+				});
+		    };
+			return true;
+		}
+    	function deleteLoanAction(btn, row_id) {
+		    if (confirm("Are you sure you want to delete this record?") == true) {
+				var process_link = "/loans/" + row_id + "/loan/";
+				$.ajax({
+					url: process_link,
+					type: 'DELETE',
+					headers: { "X-CSRFToken":  getCookie('csrftoken')},
+					success: function(result) {
+						var row = btn.parentNode.parentNode;
+  						row.parentNode.removeChild(row);
+						$("#id_message_box").show();
+						$("#id_message_box").html("Delete successfully!").delay(10000).fadeOut();
+					},
+					error: function(xhr, error){
+						$("#id_message_box").show();
+						$("#id_message_box").html(error).delay(10000).fadeOut();
+					}
+				});
+		    };
+			return true;
+		}
+		function getCookie(cname) {
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+			}
+			return "";
+		}
+	</script>
+
+</head>
+<body>
+        <div id="topBar">
+            <h1 id="gtVersion">&nbsp;Growth Street Loan Management</h1>
+        </div>
+		{% if user.is_authenticated %}
+        <div id="linkBar">
+			{% if user.is_staff %}
+            	<a id="menuButton1" class="rightLink" href="/admin/" target="_blank">Administration</a>
+			{% endif %}
+            <a id="menuButton2" class="rightLink" href="/borrower/profile/" target="_blank">Borrower Profile</a>
+            <a id="menuButton3" class="rightLink" href="/borrower/logout/" >Logout</a>
+        </div>
+        <div class="contentSection" id="rightSection">
+			<h3>
+				Name: {{user.first_name}} {{user.last_name}}, Email: {{user.email}}, Contact: {{borrower.telephone_number}}
+			</h3>
+	    	<h2 id="title">Businesses</h2>
+	    	<br/>
+            <div id="innerWrapLeft" class="innerWrap">
+                <div class="panel message_panel alert" id="id_message_box" style="display: none;">
+                </div>
+                <div >
+                	<a href="/borrower/0/business/update/" >New business</a>
+				</div>
+            	<table id="businessTable">
+            		<tr>
+            			<th>Name</th>
+            			<th>Email</th>
+            			<th>Address</th>
+            			<th>Registered Number</th>
+            			<th>Sector</th>
+            			<th>Action</th>
+            		</tr>
+            		{% if business_items %}
+            			{% for item in business_items %}
+            				<tr class="row" id="business_row_{{item.id}}">
+	                           	<td><a href="/borrower/{{item.id}}/business/update/" >{{ item.name }}</a></td>
+	                           	<td>{{ item.email }}</td>
+	                           	<td>{{ item.address }}</td>
+	                           	<td>{{ item.registered_number }}</td>
+							   	<td>{{ item.sector }}</td>
+	                           	<td><button id="delete_business_button_{{item.id}}" type="button" onclick="deleteBusinessAction(this, '{{item.id}}')">Delete</button></td>
+	                        </tr>
+	                    {% endfor %}
+	                {% endif %}
+	            </table>
+            </div>
+
+	    	<h2 id="title1">Loans</h2>
+	    	<br/>
+            <div id="innerWrapLeft1" class="innerWrap">
+                <div class="panel message_panel alert" id="id_message_box1" style="display: none;">
+                </div>
+                <div>
+                	<a href="/loans/0/loan/update/">Apply new loan</a>
+				</div>
+            	<table id="loanTable">
+            		<tr>
+            			<th>Amount</th>
+            			<th>Period in Months</th>
+            			<th>Reason</th>
+            			<th>Status</th>
+            			<th>Applied_date</th>
+            			<th>Action</th>
+            		</tr>
+            		{% if loan_items %}
+            			{% for item in loan_items %}
+            				<tr class="row" id="loan_row_{{item.id}}">
+								{% if item.deletable %}
+	                           	<td><a href="/loans/{{item.id}}/loan/update/" >{{ item.amount }}</a></td>
+								{% else %}
+	                           	<td>{{ item.amount }}</a></td>
+								{% endif %}
+	                           	<td>{{ item.period }}</td>
+	                           	<td>{{ item.reason }}</td>
+	                           	<td>{{ item.status }}</td>
+							   	<td>{{ item.applied_date}}</td>
+								{% if item.deletable %}
+	                           	<td><button id="delete_loan_button_{{item.id}}" type="button" onclick="deleteLoanAction(this, '{{item.id}}')">Delete</button></td>
+								{% else %}
+	                           	<td></td>
+								{% endif %}
+	                        </tr>
+	                    {% endfor %}
+	                {% endif %}
+	            </table>
+            </div>
+            <div id='footer'>&copy; 2016 Growth Street Limited</div>
+        </div>
+		{% else %}
+
+        <div id="linkBar">
+            <a id="menuButton2" class="rightLink" href="/borrower/register/" >Register Here</a>
+            <a id="menuButton3" class="rightLink" href="/borrower/login/" >Login</a>
+        </div>
+		{% endif %}
+</body>
+</html>

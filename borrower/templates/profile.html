@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block inhead %}
+    <title>Borrower's Profile</title>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Borrower's Profile</h1>
+    <h4> {{ errors }} </h4>
+
+    <form id="borrower_form" method="post"
+          enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ borrower_form.as_p }}
+
+        <input type="submit" name="submit" value="save" />
+    </form>
+
+{% endblock %}
