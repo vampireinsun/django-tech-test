@@ -34,7 +34,10 @@ class BorrowerBusinessForm(forms.ModelForm):
         if match_group is None:
             raise ValidationError("The field is only allowed with [0-9]!")
         else:
-            return self.cleaned_data["registered_number"]
+            if len(self.cleaned_data["registered_number"])!=8:
+                raise ValidationError("The field: registered number must be 8 digital numbers!")
+            else:
+                return self.cleaned_data["registered_number"]
 
     class Meta:
         model = BorrowerBusinesses

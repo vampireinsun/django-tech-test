@@ -26,6 +26,9 @@ class BorrowerBusinessInLineFormset(forms.models.BaseInlineFormSet):
                 match_group = re.search("^[0-9]+$", form.cleaned_data["registered_number"])
                 if match_group is None:
                     raise ValidationError("The field: registered number is only allowed with [0-9]!")
+                else:
+                    if len(form.cleaned_data["registered_number"])!=8:
+                        raise ValidationError("The field: registered number must be 8 digital numbers!")
 
 
 class BorrowerBusinessAdminForm(admin.TabularInline):

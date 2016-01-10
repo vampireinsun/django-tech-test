@@ -24,8 +24,6 @@ def update_loan_view(request, borrower_loan_id):
                 return HttpResponseRedirect("/index/")
             else:
                 context["errors"] = "Failed to create/update the loan information."
-        else:
-            context["errors"] = loan_form.errors.__str__()
     else:
         if borrower_loan_id == "0":
             current_date = datetime.now()
